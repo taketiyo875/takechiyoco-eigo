@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>英検3級 爆速合格クイズ - File 1 (1-500語) 🐾</title>
+    <style>
+        :root {
+            --primary-orange: #FF8C00;
+            --light-orange: #FFF5EE;
+            --dark-orange: #E67E22;
+            --correct-green: #2ECC71;
+            --incorrect-red: #E74C3C;
+            --text-dark: #2C3E50;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--light-orange);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(230, 126, 34, 0.15);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            border: 3px solid var(--primary-orange);
+            position: relative;
+        }
+        h1 {
+            color: var(--primary-orange);
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .level-select {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .level-btn {
+            background-color: #fff;
+            border: 2px solid var(--primary-orange);
+            color: var(--primary-orange);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .level-btn.active {
+            background-color: var(--primary-orange);
+            color: #fff;
+        }
+        .input-group {
+            margin-bottom: 30px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .question-input {
+            width: 80px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid var(--primary-orange);
+            border-radius: 5px;
+            text-align: center;
+        }
+        .start-btn {
+            background-color: var(--dark-orange);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+        .start-btn:hover {
+            background-color: var(--primary-orange);
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .home-btn {
+            background-color: #7F8C8D;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .question-text {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 40px 0;
+            color: var(--text-dark);
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 100%;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .option-btn {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+        }
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+        .option-btn.correct {
+            background-color: var(--correct-green) !important;
+        }
+        .option-btn.incorrect {
+            background-color: var(--incorrect-red) !important;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary-orange);
+            margin: 30px 0;
+        }
+        .cat-deco {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- ホーム画面 -->
+    <div id="home-screen">
+        <div class="cat-deco">🐾 🐱 🐾</div>
+        <h1>英検3級 単語テスト (File 1 / 1-500語)</h1>
+        <p>挑戦するレベルを選んでニャ！</p>
+        <div class="level-select">
+            <button class="level-btn active" onclick="selectLevel('all')">全レベル</button>
+            <button class="level-btn" onclick="selectLevel('elementary')">初級</button>
+            <button class="level-btn" onclick="selectLevel('intermediate')">中級</button>
+            <button class="level-btn" onclick="selectLevel('advanced')">上級</button>
+        </div>
+        <div class="input-group">
+            <label for="quiz-count">何問に挑戦するニャ？</label>
+            <input type="number" id="quiz-count" class="question-input" value="10" min="1" max="500">
+        </div>
+        <button class="start-btn" onclick="startQuiz()">クイズを始める 🐾</button>
+    </div>
+
+    <!-- クイズ画面 -->
+    <div id="quiz-screen" class="hidden">
+        <div class="quiz-header">
+            <span id="progress-text">1 / 10問目</span>
+            <button class="home-btn" onclick="confirmGoHome()">ホームに戻る</button>
+        </div>
+        <p style="color: #7F8C8D; margin: 0;">この日本語に合う英語を選んでニャ！</p>
+        <div id="question-box" class="question-text">日本語の意味</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="checkAnswer(0)">選択肢1</button>
+            <button class="option-btn" onclick="checkAnswer(1)">選択肢2</button>
+            <button class="option-btn" onclick="checkAnswer(2)">選択肢3</button>
+            <button class="option-btn" onclick="checkAnswer(3)">選択肢4</button>
+        </div>
+    </div>
+
+    <!-- 結果画面 -->
+    <div id="result-screen" class="hidden">
+        <div class="cat-deco">🎉 🐱 🎉</div>
+        <h1>テスト結果発表！</h1>
+        <div id="score-text" class="result-score">0 / 10</div>
+        <p id="comment-text">お疲れ様だニャ！</p>
+        <button class="start-btn" onclick="backToHome()">もう一度あそぶ</button>
+    </div>
+</div>
+
+<script>
+// 500単語の完全データ構造（連番なし）
+const vocabularyDatabase = {
+    elementary: [
+        { word: "apple", meaning: "りんご" }, { word: "school", meaning: "学校" }, { word: "family", meaning: "家族" },
+        { word: "book", meaning: "本" }, { word: "desk", meaning: "机" }, { word: "chair", meaning: "椅子" },
+        { word: "pencil", meaning: "鉛筆" }, { word: "friend", meaning: "友達" }, { word: "teacher", meaning: "先生" },
+        { word: "student", meaning: "生徒" }, { word: "house", meaning: "家" }, { word: "room", meaning: "部屋" },
+        { word: "door", meaning: "ドア" }, { word: "window", meaning: "窓" }, { word: "cat", meaning: "猫" },
+        { word: "dog", meaning: "犬" }, { word: "bird", meaning: "鳥" }, { word: "fish", meaning: "魚" },
+        { word: "water", meaning: "水" }, { word: "milk", meaning: "牛乳" }, { word: "rice", meaning: "米、ご飯" },
+        { word: "bread", meaning: "パン" }, { word: "egg", meaning: "卵" }, { word: "fruit", meaning: "果物" },
+        { word: "flower", meaning: "花" }, { word: "tree", meaning: "木" }, { word: "sun", meaning: "太陽" },
+        { word: "moon", meaning: "月" }, { word: "star", meaning: "星" }, { word: "sky", meaning: "空" },
+        { word: "sea", meaning: "海" }, { word: "river", meaning: "川" }, { word: "mountain", meaning: "山" },
+        { word: "stone", meaning: "石" }, { word: "fire", meaning: "火" }, { word: "wind", meaning: "風" },
+        { word: "rain", meaning: "雨" }, { word: "snow", meaning: "雪" }, { word: "summer", meaning: "夏" },
+        { word: "winter", meaning: "冬" }, { word: "spring", meaning: "春" }, { word: "autumn", meaning: "秋" },
+        { word: "morning", meaning: "朝" }, { word: "noon", meaning: "正午" }, { word: "evening", meaning: "夕方" },
+        { word: "night", meaning: "夜" }, { word: "today", meaning: "今日" }, { word: "tomorrow", meaning: "明日" },
+        { word: "yesterday", meaning: "昨日" }, { word: "week", meaning: "週" }, { word: "month", meaning: "月（期間）" },
+        { word: "year", meaning: "年" }, { word: "time", meaning: "時間" }, { word: "clock", meaning: "時計" },
+        { word: "money", meaning: "お金" }, { word: "shop", meaning: "店" }, { word: "train", meaning: "電車" },
+        { word: "bus", meaning: "バス" }, { word: "car", meaning: "車" }, { word: "bike", meaning: "自転車" },
+        { word: "plane", meaning: "飛行機" }, { word: "ship", meaning: "船" }, { word: "station", meaning: "駅" },
+        { word: "airport", meaning: "空港" }, { word: "street", meaning: "通り" }, { word: "park", meaning: "公園" },
+        { word: "city", meaning: "都市" }, { word: "town", meaning: "町" }, { word: "village", meaning: "村" },
+        { word: "country", meaning: "国、田舎" }, { word: "world", meaning: "世界" }, { word: "man", meaning: "男の人" },
+        { word: "woman", meaning: "女の人" }, { word: "boy", meaning: "男の子" }, { word: "girl", meaning: "女の子" },
+        { word: "baby", meaning: "赤ちゃん" }, { word: "father", meaning: "父親" }, { word: "mother", meaning: "母親" },
+        { word: "brother", meaning: "兄、弟" }, { word: "sister", meaning: "姉、妹" }, { word: "son", meaning: "息子" },
+        { word: "daughter", meaning: "娘" }, { word: "uncle", meaning: "おじ" }, { word: "aunt", meaning: "おば" },
+        { word: "hand", meaning: "手" }, { word: "foot", meaning: "足（足首から下）" }, { word: "leg", meaning: "脚" },
+        { word: "head", meaning: "頭" }, { word: "face", meaning: "顔" }, { word: "eye", meaning: "目" },
+        { word: "ear", meaning: "耳" }, { word: "mouth", meaning: "口" }, { word: "nose", meaning: "鼻" },
+コードは注意してご使用ください。{ word: "hair", meaning: "髪" }, { word: "heart", meaning: "心、心臓" }, { word: "body", meaning: "体" },{ word: "clothes", meaning: "服" }, { word: "cap", meaning: "帽子（ふちなし）" }, { word: "bag", meaning: "かばん" },{ word: "shoes", meaning: "靴" }, { word: "sock", meaning: "靴下" }, { word: "coat", meaning: "コート" },{ word: "shirt", meaning: "シャツ" }, { word: "glass", meaning: "コップ、ガラス" }, { word: "cup", meaning: "カップ" },{ word: "plate", meaning: "皿" }, { word: "fork", meaning: "フォーク" }, { word: "spoon", meaning: "スプーン" },{ word: "knife", meaning: "ナイフ" }, { word: "food", meaning: "食べ物" }, { word: "meat", meaning: "肉" },{ word: "fish", meaning: "魚（食用も）" }, { word: "vegetable", meaning: "野菜" }, { word: "cake", meaning: "ケーキ" },{ word: "salt", meaning: "塩" }, { word: "sugar", meaning: "砂糖" }, { word: "tea", meaning: "茶、紅茶" },{ word: "coffee", meaning: "コーヒー" }, { word: "juice", meaning: "ジュース" }, { word: "letter", meaning: "手紙、文字" },{ word: "song", meaning: "歌" }, { word: "picture", meaning: "写真、絵" }, { word: "movie", meaning: "映画" },{ word: "game", meaning: "試合、ゲーム" }, { word: "sport", meaning: "スポーツ" }, { word: "music", meaning: "音楽" },{ word: "piano", meaning: "ピアノ" }, { word: "guitar", meaning: "ギター" }, { word: "ball", meaning: "ボール" },{ word: "toy", meaning: "おもちゃ" }, { word: "doll", meaning: "人形" }, { word: "card", meaning: "カード" },{ word: "box", meaning: "箱" }, { word: "bag", meaning: "袋、バッグ" }, { word: "paper", meaning: "紙" },{ word: "news", meaning: "ニュース" }, { word: "radio", meaning: "ラジオ" }, { word: "television", meaning: "テレビ" },{ word: "phone", meaning: "電話" }, { word: "computer", meaning: "コンピューター" }, { word: "camera", meaning: "カメラ" },{ word: "bed", meaning: "ベッド" }, { word: "table", meaning: "テーブル" }, { word: "clock", meaning: "置き時計" },{ word: "watch", meaning: "腕時計" }, { word: "key", meaning: "鍵" }, { word: "umbrella", meaning: "傘" },{ word: "color", meaning: "色" }, { word: "red", meaning: "赤" }, { word: "blue", meaning: "青" },{ word: "green", meaning: "緑" }, { word: "yellow", meaning: "黄色" }, { word: "white", meaning: "白" },{ word: "black", meaning: "黒" }, { word: "brown", meaning: "茶色" }, { word: "orange", meaning: "オレンジ色" },{ word: "pink", meaning: "ピンク色" }, { word: "purple", meaning: "紫色" }, { word: "gold", meaning: "金" },{ word: "silver", meaning: "銀" }, { word: "animal", meaning: "動物" }, { word: "bear", meaning: "クマ" },{ word: "lion", meaning: "ライオン" }, { word: "tiger", meaning: "トラ" }, { word: "elephant", meaning: "ゾウ" },{ word: "monkey", meaning: "サル" }, { word: "rabbit", meaning: "ウサギ" }, { word: "mouse", meaning: "ネズミ" },{ word: "horse", meaning: "馬" }, { word: "cow", meaning: "牛" }, { word: "sheep", meaning: "羊" }],intermediate: [{ word: "arrive", meaning: "到着する" }, { word: "government", meaning: "政府" }, { word: "environment", meaning: "環境" },{ word: "accept", meaning: "受け入れる" }, { word: "advice", meaning: "忠告、アドバイス" }, { word: "affect", meaning: "影響を与える" },{ word: "agree", meaning: "同意する" }, { word: "allow", meaning: "許可する" }, { word: "amount", meaning: "量、総額" },{ word: "announce", meaning: "発表する" }, { word: "appear", meaning: "現れる" }, { word: "argue", meaning: "主張する、議論する" },{ word: "arrange", meaning: "手配する、並べる" }, { word: "article", meaning: "記事" }, { word: "artist", meaning: "芸術家" },{ word: "assume", meaning: "仮定する" }, { word: "attend", meaning: "出席する" }, { word: "audience", meaning: "聴衆、観客" },{ word: "author", meaning: "著者" }, { word: "average", meaning: "平均" }, { word: "avoid", meaning: "避ける" },{ word: "base", meaning: "土台、基礎" }, { word: "behavior", meaning: "行動、振る舞い" }, { word: "benefit", meaning: "利益、恩恵" },{ word: "beyond", meaning: "~を越えて" }, { word: "bill", meaning: "請求書、紙幣" }, { word: "blood", meaning: "血" },{ word: "brain", meaning: "脳" }, { word: "business", meaning: "ビジネス、職業" }, { word: "campaign", meaning: "運動、キャンペーン" },{ word: "capital", meaning: "首都、資本" }, { word: "career", meaning: "経歴、キャリア" }, { word: "cause", meaning: "原因、引き起こす" },{ word: "celebrate", meaning: "祝う" }, { word: "century", meaning: "世紀" }, { word: "certain", meaning: "確かな、ある特定の" },{ word: "challenge", meaning: "課題、挑戦" }, { word: "chance", meaning: "機会、チャンス" }, { word: "change", meaning: "変化、変える" },{ word: "character", meaning: "性格、登場人物" }, { word: "charge", meaning: "料金、責任" }, { word: "choice", meaning: "選択" },{ word: "citizen", meaning: "市民" }, { word: "climate", meaning: "気候" }, { word: "coach", meaning: "コーチ" },{ word: "collection", meaning: "収集、コレクション" }, { word: "college", meaning: "大学" }, { word: "comfort", meaning: "快適さ" },{ word: "common", meaning: "共通の、普通の" }, { word: "community", meaning: "地域社会" }, { word: "company", meaning: "会社、仲間" },{ word: "compare", meaning: "比較する" }, { word: "compete", meaning: "競う" }, { word: "complain", meaning: "不満を言う" },{ word: "complete", meaning: "完全な、完成させる" }, { word: "condition", meaning: "状態、条件" }, { word: "conduct", meaning: "行う、導く" },{ word: "conference", meaning: "会議" }, { word: "consider", meaning: "考慮する" }, { word: "consumer", meaning: "消費者" },{ word: "contain", meaning: "含む" }, { word: "continue", meaning: "続ける" }, { word: "control", meaning: "支配、管理する" },{ word: "cost", meaning: "費用、費用がかかる" }, { word: "couple", meaning: "一対、カップル" }, { word: "court", meaning: "裁判所、コート" },{ word: "create", meaning: "創造する" }, { word: "crime", meaning: "犯罪" }, { word: "culture", meaning: "文化" },{ word: "customer", meaning: "顧客" }, { word: "damage", meaning: "損害、損害を与える" }, { word: "danger", meaning: "危険" },{ word: "data", meaning: "データ、資料" }, { word: "deal", meaning: "取引、扱う" }, { word: "decade", meaning: "10年間" },{ word: "decide", meaning: "決定する" }, { word: "decision", meaning: "決定" }, { word: "declare", meaning: "宣言する" },{ word: "decrease", meaning: "減少する" }, { word: "deep", meaning: "深い" }, { word: "defend", meaning: "守る、防御する" },{ word: "define", meaning: "定義する" }, { word: "degree", meaning: "度、学位" }, { word: "delay", meaning: "遅らせる" },{ word: "deliver", meaning: "配達する" }, { word: "demand", meaning: "要求、需要" }, { word: "depend", meaning: "依存する、次第である" },{ word: "describe", meaning: "描写する、説明する" }, { word: "design", meaning: "設計する、デザイン" }, { word: "destroy", meaning: "破壊する" },{ word: "detail", meaning: "詳細" }, { word: "determine", meaning: "決定する、決意する" }, { word: "develop", meaning: "発展させる" },{ word: "device", meaning: "装置、デバイス" }, { word: "difference", meaning: "違い" }, { word: "difficult", meaning: "難しい" },{ word: "direct", meaning: "直接の、指示する" }, { word: "direction", meaning: "方向、指示" }, { word: "director", meaning: "監督、取締役" },{ word: "discover", meaning: "発見する" }, { word: "discuss", meaning: "話し合う" }, { word: "discussion", meaning: "議論" },{ word: "disease", meaning: "病気" }, { word: "distance", meaning: "距離" }, { word: "district", meaning: "地区" },{ word: "divide", meaning: "分ける" }, { word: "doctor", meaning: "医者、博士" }, { word: "document", meaning: "書類" },{ word: "double", meaning: "2倍の" }, { word: "draw", meaning: "描く、引っぱる" }, { word: "dream", meaning: "夢" },{ word: "drug", meaning: "薬、麻薬" }, { word: "dry", meaning: "乾いた" }, { word: "during", meaning: "~の間ずっと" },{ word: "duty", meaning: "義務、関税" }, { word: "each", meaning: "それぞれの" }, { word: "earn", meaning: "稼ぐ" },{ word: "earth", meaning: "地球、陸地" }, { word: "ease", meaning: "容易さ、和らげる" }, { word: "economic", meaning: "経済の" },{ word: "economy", meaning: "経済" }, { word: "edge", meaning: "縁、端" }, { word: "education", meaning: "教育" },{ word: "effect", meaning: "効果、影響" }, { word: "effort", meaning: "努力" }, { word: "either", meaning: "どちらか" },{ word: "election", meaning: "選挙" }, { word: "element", meaning: "要素" }, { word: "employee", meaning: "従業員" },{ word: "employer", meaning: "雇い主" }, { word: "empty", meaning: "空の" }, { word: "encourage", meaning: "励ます" },{ word: "end", meaning: "終わり" }, { word: "energy", meaning: "エネルギー" }, { word: "enjoy", meaning: "楽しむ" },{ word: "enough", meaning: "十分な" }, { word: "ensure", meaning: "確実にする" }, { word: "enter", meaning: "入る" },{ word: "entire", meaning: "全体の" }, { word: "equal", meaning: "平等な、等しい" }, { word: "equipment", meaning: "設備、用具" },{ word: "escape", meaning: "逃げる" }, { word: "especially", meaning: "特に" }, { word: "establish", meaning: "設立する" },{ word: "event", meaning: "出来事、行事" }, { word: "every", meaning: "すべての" }, { word: "evidence", meaning: "証拠" },{ word: "exact", meaning: "正確な" }, { word: "examine", meaning: "調査する" }, { word: "example", meaning: "例" },{ word: "excellent", meaning: "優秀な" }, { word: "except", meaning: "~を除いて" }, { word: "exchange", meaning: "交換する" },{ word: "excite", meaning: "興奮させる" }, { word: "excuse", meaning: "言い訳、許す" }, { word: "executive", meaning: "幹部、執行部" },{ word: "exercise", meaning: "運動、練習" }, { word: "exhibit", meaning: "展示する" }, { word: "exist", meaning: "存在する" },{ word: "expect", meaning: "期待する" }, { word: "expense", meaning: "費用" }, { word: "experience", meaning: "経験" },{ word: "experiment", meaning: "実験" }, { word: "expert", meaning: "専門家" }, { word: "explain", meaning: "説明する" }],advanced: [{ word: "accomplish", meaning: "成し遂げる" }, { word: "analyze", meaning: "分析する" }, { word: "criticize", meaning: "批判する" },{ word: "abundant", meaning: "豊富な" }, { word: "accurate", meaning: "正確な" }, { word: "acknowledge", meaning: "認める" },{ word: "acquire", meaning: "獲得する" }, { word: "adequate", meaning: "十分な、適切な" }, { word: "advocate", meaning: "主張する、支持者" },{ word: "alter", meaning: "変える" }, { word: "alternative", meaning: "代わりの、選択肢" }, { word: "ambiguous", meaning: "あいまいな" },{ word: "anticipate", meaning: "予想する" }, { word: "apparent", meaning: "明白な" }, { word: "appreciate", meaning: "感謝する、正しく評価する" },{ word: "approach", meaning: "近づく、アプローチ" }, { word: "appropriate", meaning: "適切な" }, { word: "approve", meaning: "承認する" },{ word: "artificial", meaning: "人工的な" }, { word: "aspect", meaning: "側面、アスペクト" }, { word: "assemble", meaning: "組み立てる、集まる" },{ word: "assert", meaning: "断言する、主張する" }, { word: "assess", meaning: "評価する" }, { word: "assign", meaning: "割り当てる" },{ word: "assistance", meaning: "援助" }, { word: "associate", meaning: "連想する、仲間" }, { word: "attribute", meaning: "帰せしめる、特性" },{ word: "authentic", meaning: "本物の" }, { word: "authority", meaning: "権威、当局" }, { word: "available", meaning: "利用可能な" },{ word: "ban", meaning: "禁止する" }, { word: "barrier", meaning: "障壁" }, { word: "behalf", meaning: "利益、代表" },{ word: "bias", meaning: "偏見" }, { word: "brief", meaning: "簡潔な" }, { word: "broad", meaning: "広い" },{ word: "budget", meaning: "予算" }, { word: "capable", meaning: "能力がある" }, { word: "capacity", meaning: "容量、能力" },{ word: "category", meaning: "部類、カテゴリー" }, { word: "cease", meaning: "やむ、終わる" }, { word: "chaos", meaning: "混沌" },{ word: "chronological", meaning: "年代順の" }, { word: "civil", meaning: "市民の、民事の" }, { word: "clarify", meaning: "明確にする" },{ word: "classic", meaning: "古典的な" }, { word: "clause", meaning: "条項、節" }, { word: "code", meaning: "暗号、法典" },{ word: "coherent", meaning: "首尾一貫した" }, { word: "coincide", meaning: "同時に起こる" }, { word: "collaborate", meaning: "共同で行う" },{ word: "collapse", meaning: "崩壊する" }, { word: "colleague", meaning: "同僚" }, { word: "commence", meaning: "始まる" },{ word: "comment", meaning: "批評、コメント" }, { word: "commission", meaning: "委員会、手数料" }, { word: "commit", meaning: "犯す、委ねる" },{ word: "commodity", meaning: "商品、日用品" }, { word: "compatible", meaning: "互換性のある" }, { word: "compensate", meaning: "補償する" },{ word: "compile", meaning: "編集する" }, { word: "complement", meaning: "補完するもの" }, { word: "complex", meaning: "複雑な" },{ word: "component", meaning: "構成要素" }, { word: "compound", meaning: "化合物、混合の" }, { word: "comprehensive", meaning: "包括的な" },{ word: "comprise", meaning: "構成される" }, { word: "compromise", meaning: "妥協する" }, { word: "conceal", meaning: "隠す" },{ word: "concede", meaning: "認める、譲歩する" }, { word: "conceive", meaning: "思いつく" }, { word: "concentrate", meaning: "集中する" },{ word: "concept", meaning: "概念" }, { word: "conclude", meaning: "結論づける" }, { word: "concrete", meaning: "具体的な" },{ word: "concur", meaning: "同意する" }, { word: "condemn", meaning: "非難する" }, { word: "confer", meaning: "授与する、相談する" },{ word: "confine", meaning: "限定する、閉じ込める" }, { word: "confirm", meaning: "確認する" }, { word: "conflict", meaning: "対立、紛争" },{ word: "conform", meaning: "従う" }, { word: "confront", meaning: "立ち向かう" }, { word: "confuse", meaning: "混乱させる" },{ word: "congratulate", meaning: "祝う" }, { word: "congress", meaning: "国会、議会" }, { word: "consequence", meaning: "結果" },{ word: "consequent", meaning: "結果として生じる" }, { word: "considerable", meaning: "かなりの" }, { word: "consist", meaning: "成る" },{ word: "consistent", meaning: "一貫した" }, { word: "constant", meaning: "絶え間ない" }, { word: "constitute", meaning: "構成する" },{ word: "constrain", meaning: "強いる、抑制する" }, { word: "construct", meaning: "建設する" }, { word: "consult", meaning: "相談する" },{ word: "consume", meaning: "消費する" }, { word: "contact", meaning: "接触、連絡" }, { word: "contemporary", meaning: "現代の" },{ word: "context", meaning: "文脈、背景" }, { word: "continent", meaning: "大陸" }, { word: "contract", meaning: "契約" },{ word: "contradict", meaning: "矛盾する、否定する" }, { word: "contrary", meaning: "反対の" }, { word: "contrast", meaning: "対比" },{ word: "contribute", meaning: "貢献する" }, { word: "controversial", meaning: "議論を呼ぶ" }, { word: "controversy", meaning: "論争" },{ word: "convene", meaning: "招集する" }, { word: "converse", meaning: "会話する、逆の" }, { word: "convert", meaning: "転換する" },{ word: "convey", meaning: "伝える、運ぶ" }, { word: "convince", meaning: "納得させる" }, { word: "cooperate", meaning: "協力する" },{ word: "coordinate", meaning: "調整する" }, { word: "core", meaning: "芯、核心" }, { word: "corporate", meaning: "企業の" },{ word: "correspond", meaning: "一致する、文通する" }, { word: "corrupt", meaning: "腐敗した" }, { word: "counterpart", meaning: "対応する人・物" },{ word: "county", meaning: "郡" }, { word: "courage", meaning: "勇起" }, { word: "criteria", meaning: "基準（複数形）" },{ word: "crucial", meaning: "決定的な、重要な" }, { word: "crude", meaning: "生の、粗野な" }, { word: "cruise", meaning: "巡航する" },{ word: "cue", meaning: "合図" }, { word: "cure", meaning: "治療する" }, { word: "currency", meaning: "通貨" },{ word: "cycle", meaning: "周期、循環" }, { word: "debate", meaning: "討論" }, { word: "debt", meaning: "借金" },{ word: "decade", meaning: "10年" }, { word: "decay", meaning: "衰退する、腐る" }, { word: "deceive", meaning: "騙す" },{ word: "decent", meaning: "きちんとした" }, { word: "decline", meaning: "衰退する、辞退する" }, { word: "decorate", meaning: "飾る" },{ word: "dedicate", meaning: "捧げる" }, { word: "defeat", meaning: "打ち負かす" }, { word: "defect", meaning: "欠陥" },{ word: "deficiency", meaning: "不足、欠乏" }, { word: "deficit", meaning: "赤字" }, { word: "definitive", meaning: "決定的な" },{ word: "defy", meaning: "反抗する" }, { word: "deliberate", meaning: "意図的な、慎重な" }, { word: "delicate", meaning: "繊細な" }]};let currentLevel = 'all';let quizPool = [];let currentQuizList = [];let currentIndex = 0;let score = 0;let isAnswered = false;function selectLevel(level) {currentLevel = level;document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));event.target.classList.add('active');}function startQuiz() {quizPool = [];if (currentLevel === 'all') {quizPool = [...vocabularyDatabase.elementary, ...vocabularyDatabase.intermediate, ...vocabularyDatabase.advanced];} else {quizPool = [...vocabularyDatabase[currentLevel]];}const maxQuestions = parseInt(document.getElementById('quiz-count').value) || 10;const finalCount = Math.min(maxQuestions, quizPool.length);// シャッフルcurrentQuizList = [...quizPool].sort(() => 0.5 - Math.random()).slice(0, finalCount);if (currentQuizList.length === 0) {alert("単語データが見つかりませんニャ！");return;}currentIndex = 0;score = 0;document.getElementById('home-screen').classList.add('hidden');document.getElementById('result-screen').classList.add('hidden');document.getElementById('quiz-screen').classList.remove('hidden');showQuestion();}function showQuestion() {isAnswered = false;const currentItem = currentQuizList[currentIndex];document.getElementById('progress-text').innerText = ${currentIndex + 1} / ${currentQuizList.length}問目;// 日本語の問題文を表示document.getElementById('question-box').innerText = currentItem.meaning;// 誤選択肢の生成let wrongChoices = quizPool.filter(item => item.word !== currentItem.word).map(item => item.word);// 重複を削除wrongChoices = [...new Set(wrongChoices)].sort(() => 0.5 - Math.random()).slice(0, 3);// 4択を作成（英語の選択肢）let choices = [currentItem.word, ...wrongChoices].sort(() => 0.5 - Math.random());const buttons = document.querySelectorAll('.option-btn');buttons.forEach((btn, index) => {btn.innerText = choices[index];btn.className = 'option-btn'; // スタイル初期化btn.disabled = false;});}function checkAnswer(selectedIndex) {if (isAnswered) return;isAnswered = true;const buttons = document.querySelectorAll('.option-btn');const selectedText = buttons[selectedIndex].innerText;const correctText = currentQuizList[currentIndex].word;buttons.forEach(btn => {btn.disabled = true;if (btn.innerText === correctText) {btn.classList.add('correct');}});if (selectedText === correctText) {score++;} else {buttons[selectedIndex].classList.add('incorrect');}setTimeout(() => {currentIndex++;if (currentIndex < currentQuizList.length) {showQuestion();} else {showResult();}}, 1200);}function confirmGoHome() {if (confirm("データが消えるけど大丈夫かニャ？")) {backToHome();}}function showResult() {document.getElementById('quiz-screen').classList.add('hidden');document.getElementById('result-screen').classList.remove('hidden');document.getElementById('score-text').innerText = ${score} / ${currentQuizList.length};const rate = score / currentQuizList.length;if (rate === 1) {document.getElementById('comment-text').innerText = "カンペキだニャ！天才キャット現る！🐾";} else if (rate >= 0.7) {document.getElementById('comment-text').innerText = "すごいニャ！合格圏内に入っているニャ！";} else {document.getElementById('comment-text').innerText = "まだまだ伸びしろがあるニャ！もう一回挑戦だニャ🐾";}}function backToHome() {document.getElementById('quiz-screen').classList.add('hidden');document.getElementById('result-screen').classList.add('hidden');document.getElementById('home-screen').classList.remove('hidden');}
